@@ -1,28 +1,22 @@
-import java.util.*;
-
 class Solution {
     public int countMaxOrSubsets(int[] nums) {
-        int OR = 0;
-        for (int x : nums) {
-            OR |= x;
+        int target = 0;
+        for(int x : nums){
+            target |= x;
         }
 
-        Map<Integer, Integer> map = new HashMap<>();
-        map.put(0, 1);
-        for (int x : nums) {
-            Map<Integer, Integer> newMap = new HashMap<>(map);
-            for (Map.Entry<Integer, Integer> e : map.entrySet()) {
-                int mask = e.getKey();
-                int count = e.getValue();
-                int newEntryMask = mask | x;
-                int newCount = newMap.getOrDefault(newEntryMask, 0) + count;
-                newMap.put(newEntryMask, newCount);
-            }
-
-            map = newMap;
+        return dfs(nums, target, 0, 0);
+    }
+    int dfs(int[] nums, int target, int cur, int i) {
+        if(cur == target) {
+            return (int) Math.pow(2, nums.length - i);
+        }
+        if(i == nums.length) {
+            return 0;
         }
 
-        return map.getOrDefault(OR, 0);
+        return dfs(nums, target, cur | nums[i], i + 1 ) + dfs(nums, target, cur, i + 1);
 
     }
 }
+/**/
